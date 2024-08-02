@@ -19,20 +19,30 @@ public class SecurityConfig {
     private final AuthenticationProvider authProvider;
     private final JwtAuthentificationFIlter jwtAuthenticationFilter;
 
+    /**
+     * @Bean public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+     * return http
+     * .csrf(csrf ->
+     * csrf.disable())
+     * .authorizeHttpRequests(authRequest ->
+     * authRequest
+     * .requestMatchers("/auth/**").permitAll()
+     * .anyRequest().authenticated()
+     * )
+     * .sessionManagement(session ->
+     * session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+     * .authenticationProvider(authProvider)
+     * .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+     * .build();
+     * }
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf ->
-                        csrf.disable())
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authRequest ->
-                        authRequest
-                                .requestMatchers("/auth/**").permitAll()
-                                .anyRequest().authenticated()
+                        authRequest.anyRequest().permitAll()
                 )
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

@@ -20,7 +20,11 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public List<CandidateResponse> getCandidates() {
-        return null;
+        List<Candidate> candidates = candidateRepository.findAll();
+        if (candidates.isEmpty()) throw new ResourceNotFoundException("There aren´t Candidates");
+        return candidates.stream().map(
+                candidateMapper::toCandidateResponse
+        ).toList();
     }
 
     @Override
@@ -32,11 +36,19 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public CandidateResponse saveCandidate(CandidateRequest candidateRequest) {
-        return null;
+        Candidate candidate = Candidate.builder()
+                .name(candidateRequest.getName())
+                .partyName(candidateRequest.getPartyName())
+                .build();
+        return candidateMapper.toCandidateResponse(
+                candidateRepository.save(candidate)
+        );
     }
 
     @Override
     public void deleteCandidateById(Long candidateId) {
-
+        Candidate candidate = candidateRepository.findById(candidateId)
+                .orElseThrow(() -> new ResourceNotFoundException("Candidate with id " + candidateId + " not found"));
+        candidateRepository.delete(candidate);
     }
 }
