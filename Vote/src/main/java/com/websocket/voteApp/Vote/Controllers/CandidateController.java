@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/candidate")
 @RequiredArgsConstructor
@@ -24,6 +26,16 @@ public class CandidateController {
                 .statusCode("201")
                 .message("Candidate created successfully")
                 .build(), HttpStatus.CREATED);
+    }
+    
+    @GetMapping("findAll")
+    public ResponseEntity<SuccessResponse>  findAllcandidates() {
+        List<CandidateResponse> candidates = candidateService.getCandidates();
+        return new ResponseEntity<>(SuccessResponse.builder()
+                .object(candidates)
+                .message("Candidates was retrieved successfully")
+                .statusCode("200")
+                .build(),HttpStatus.OK);
     }
 
     @GetMapping("/hello")
