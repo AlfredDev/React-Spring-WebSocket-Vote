@@ -26,4 +26,5 @@ public class Candidate {
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Vote> votes;
 
+
 }

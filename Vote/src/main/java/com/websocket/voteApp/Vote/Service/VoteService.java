@@ -6,6 +6,8 @@ import com.websocket.voteApp.Vote.Models.Vote;
 import java.util.List;
 
 public interface VoteService {
+    VoteResponse saveVote(Long userId, Long candidateId, Long pollId);
+
     VoteResponse saveVote(Vote vote);
 
     List<VoteResponse> getAllVotes();
