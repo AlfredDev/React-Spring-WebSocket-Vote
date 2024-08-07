@@ -19,5 +19,7 @@ public class PollResponse {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    private Integer voteCountPoll;
+    private Set<CandidateResponse> candidates;
 
 }

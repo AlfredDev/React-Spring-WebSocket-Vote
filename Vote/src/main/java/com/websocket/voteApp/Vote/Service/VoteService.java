@@ -14,4 +14,6 @@ public interface VoteService {
 
     List<VoteResponse> getVotesFromPoll();
 
+    VoteResponse getVoiteByYd(Long voteId);
+
 }

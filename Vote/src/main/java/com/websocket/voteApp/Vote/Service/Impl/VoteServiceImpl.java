@@ -61,4 +61,10 @@ public class VoteServiceImpl implements VoteService {
     public List<VoteResponse> getVotesFromPoll() {
         return null;
     }
+
+    @Override
+    public VoteResponse getVoiteByYd(Long voteId) {
+        Vote vote = voteRepository.findById(voteId).orElseThrow(() -> new ResourceNotFoundException("Could found vote"));
+        return voteMapper.toVoteResponse(vote);
+    }
 }
