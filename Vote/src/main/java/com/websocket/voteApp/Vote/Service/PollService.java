@@ -12,7 +12,7 @@ public interface PollService {
 
     PollResponse createPoll(PollRequest request);
 
-    PollResponse updatePoll(PollRequest request);
+    PollResponse updatePoll(PollRequest request, Long id);
 
     void deletePollById(Long id);
 

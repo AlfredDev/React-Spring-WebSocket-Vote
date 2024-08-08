@@ -14,9 +14,12 @@ import com.websocket.voteApp.Vote.Repository.VoteRepository;
 import com.websocket.voteApp.Vote.Service.VoteService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -31,9 +34,15 @@ public class VoteServiceImpl implements VoteService {
     @Override
     @Transactional
     public VoteResponse saveVote(Long userId, Long candidateId, Long pollId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Doesn't Exist"));
-        Poll poll = pollRepository.findById(candidateId).orElseThrow(() -> new ResourceNotFoundException("User doesnt Exist"));
-        Candidate candidate = candidateRepository.findById(candidateId).orElseThrow(() -> new ResourceNotFoundException("Candidate Doesn´t Exisst"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userId + " not found"));
+
+        Poll poll = pollRepository.findById(pollId)
+                .orElseThrow(() -> new ResourceNotFoundException("Poll with ID " + pollId + " not found"));
+
+        Candidate candidate = candidateRepository.findById(candidateId)
+                .orElseThrow(() -> new ResourceNotFoundException("Candidate with ID " + candidateId + " not found"));
+
         Vote vote = Vote.builder()
                 .candidate(candidate)
                 .user(user)
@@ -52,19 +61,24 @@ public class VoteServiceImpl implements VoteService {
     @Override
     public List<VoteResponse> getAllVotes() {
         List<Vote> votes = voteRepository.findAll();
-        if (votes.isEmpty()) throw new ResourceNotFoundException("There aren´t Candidates");
-        return votes.stream().map(voteMapper::toVoteResponse)
+        if (votes.isEmpty()) return Collections.emptyList();
+        return votes.stream()
+                .map(voteMapper::toVoteResponse)
                 .toList();
     }
 
     @Override
-    public List<VoteResponse> getVotesFromPoll() {
-        return null;
+    public Page<VoteResponse> getVotesFromPoll(Long pollId, Pageable pageable) {
+        Page<Vote> votes = voteRepository.getVotesByPollId(pollId, pageable);
+        if (votes.isEmpty()) throw new ResourceNotFoundException("No votes found for poll with ID " + pollId);
+
+        return votes.map(voteMapper::toVoteResponse);
     }
 
     @Override
-    public VoteResponse getVoiteByYd(Long voteId) {
-        Vote vote = voteRepository.findById(voteId).orElseThrow(() -> new ResourceNotFoundException("Could found vote"));
+    public VoteResponse getVoteById(Long voteId) {
+        Vote vote = voteRepository.findById(voteId)
+                .orElseThrow(() -> new ResourceNotFoundException("Could found vote"));
         return voteMapper.toVoteResponse(vote);
     }
 }

@@ -47,8 +47,12 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public void deleteCandidateById(Long candidateId) {
-        Candidate candidate = candidateRepository.findById(candidateId)
-                .orElseThrow(() -> new ResourceNotFoundException("Candidate with id " + candidateId + " not found"));
-        candidateRepository.delete(candidate);
+        candidateRepository.findById(candidateId).ifPresentOrElse(
+                candidateRepository::delete,
+                () -> {
+                    throw new ResourceNotFoundException("Candidate with id " + candidateId + " not found");
+                }
+        );
     }
+
 }

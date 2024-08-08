@@ -2,6 +2,8 @@ package com.websocket.voteApp.Vote.Service;
 
 import com.websocket.voteApp.Vote.DTO.VoteResponse;
 import com.websocket.voteApp.Vote.Models.Vote;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -12,8 +14,8 @@ public interface VoteService {
 
     List<VoteResponse> getAllVotes();
 
-    List<VoteResponse> getVotesFromPoll();
+    Page<VoteResponse> getVotesFromPoll(Long pollId, Pageable pageable);
 
-    VoteResponse getVoiteByYd(Long voteId);
+    VoteResponse getVoteById(Long voteId);
 
 }
