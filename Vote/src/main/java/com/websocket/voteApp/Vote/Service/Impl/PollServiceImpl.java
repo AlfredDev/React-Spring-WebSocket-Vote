@@ -17,7 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PollImpl implements PollService {
+public class PollServiceImpl implements PollService {
     private final PollRepository pollRepository;
     private final PollMapper pollMapper;
     private final VoteRepository voteRepository;

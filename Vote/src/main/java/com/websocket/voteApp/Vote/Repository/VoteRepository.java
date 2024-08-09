@@ -12,7 +12,8 @@ import java.util.List;
 @Repository
 public interface VoteRepository extends JpaRepository<Vote, Long> {
     @Query("SELECT COUNT(v) FROM Vote v WHERE v.poll.id = :pollId")
-    int countByPollId(Long id);
+    int countByPollId(Long pollId);
 
-    Page<Vote> getVotesByPollId(Long id, Pageable pageable);
+
+    Page<Vote> getVotesByPollId(Long pollId, Pageable pageable);
 }
