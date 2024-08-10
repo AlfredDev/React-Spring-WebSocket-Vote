@@ -51,6 +51,11 @@ jobs:
           docker tag vote-backend:latest alfreddev14/vote-backend:latest
           docker push alfreddev14/vote-backend:latest
 
-      - name: Run Docker Compose
+      - name: Install Docker Compose
         run: |
-          docker-compose -f docker-compose.yml up --build -d
+          sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version  # Check if installation was successful
+
+      - name: Run Docker Compose
+        run: docker-compose -f docker-compose.yml up --build -d
