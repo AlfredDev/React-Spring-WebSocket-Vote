@@ -7,7 +7,6 @@ build/
 *.log
 *.xml
 *.properties
-/target/
 /.idea/
 /.vscode/
 /node_modules/
