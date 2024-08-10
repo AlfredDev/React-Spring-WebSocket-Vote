@@ -7,4 +7,4 @@ RUN mvn package -DskipTests
 
 FROM openjdk:17-alpine
 COPY --from=builder /app/target/Vote-1.0.0.jar app.jar
-CMD ["java","-jar","app.jar"]
+CMD ["java", "-jar", "app.jar", "--server.port=${PORT}"]
