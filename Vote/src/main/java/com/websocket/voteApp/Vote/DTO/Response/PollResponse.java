@@ -1,9 +1,7 @@
 package com.websocket.voteApp.Vote.DTO.Response;
 
 import com.websocket.voteApp.Vote.Models.Candidate;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -11,6 +9,8 @@ import java.util.Set;
 @Builder
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PollResponse {
     private Long id;
 

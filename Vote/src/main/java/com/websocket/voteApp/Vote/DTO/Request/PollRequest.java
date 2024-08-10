@@ -3,15 +3,15 @@ package com.websocket.voteApp.Vote.DTO.Request;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PollRequest {
 
     @NotEmpty(message = "The name of the poll can´t be empty")
