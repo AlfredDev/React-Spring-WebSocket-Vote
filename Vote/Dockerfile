@@ -1,5 +1,10 @@
-FROM openjdk:17-jdk-slim
-ARG JAR_FILE=target/Vote-1.0.0.jar
-COPY ${JAR_FILE} app_vote.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app_vote.jar"]
+FROM maven:3-eclipse-temurin-17-alpine AS builder
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn package -DskipTests
+
+FROM openjdk:17-alpine
+COPY --from=builder /app/target/Vote-1.0.0.jar app.jar
+CMD ["java","-jar","app.jar"]
