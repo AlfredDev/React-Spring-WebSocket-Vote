@@ -6,24 +6,25 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DB_URL: jdbc:mysql://vote_db:3306/vote_spring?createDatabaseIfNotExist=true&serverTimezone=UTC
-      DB_USER_NAME: root
+      DB_URL: jdbc:postgresql://vote_db:5432/vote_spring?currentSchema=public
+      DB_USER_NAME: postgres
       DB_PASSWORD: 1234
     restart: always
     depends_on:
       vote_db:
         condition: service_healthy
+
   vote_db:
-    image: mysql:8.0.33
+    image: postgres:13
     ports:
-      - "3307:3306"
+      - "5433:5432"
     environment:
-      MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_PASSWORD: 1234
-      MYSQL_DATABASE: vote_spring
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: vote_spring
     restart: always
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "pg_isready -d ${POSTGRES_DB} -U ${POSTGRES_USER}"]
       timeout: 10s
       retries: 10
 
