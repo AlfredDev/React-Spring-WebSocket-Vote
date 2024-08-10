@@ -26,3 +26,9 @@ services:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 10s
       retries: 10
+
+  vote-frontend:
+    build: votingWebSockets-Front
+    ports:
+      - "80:80"
+    restart: always
