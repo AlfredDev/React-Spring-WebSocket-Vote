@@ -1,25 +1,28 @@
-# Base image
-FROM node:14 as build
+# Base image with a newer Node version
+FROM node:18 as build
 
 # Set working directory
 WORKDIR /app
 
-# Add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
+# Install a specific version of npm
+RUN npm install -g npm@7
 
-# Install and cache app dependencies
+# Install dependencies
 COPY package.json /app/package.json
-RUN npm install
-RUN npm install react-scripts@3.4.1 -g
+COPY package-lock.json /app/package-lock.json
+RUN npm install --legacy-peer-deps
 
-# Add app
+# Add app source code
 COPY . /app
 
 # Build the app
 RUN npm run build
 
+# Verify the build output
+RUN ls -la /app/dist
+
 # Production image, copy all the files and run nginx
 FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

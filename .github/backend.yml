@@ -13,10 +13,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
+          java-version: '17'
 
       - name: Build with Maven
         run: mvn clean install --file Vote/pom.xml
@@ -24,5 +24,11 @@ jobs:
       - name: Build Docker image
         run: docker build -t vote-backend:latest ./Vote
 
+      - name: Push Docker image
+        run: |
+          docker tag vote-backend:latest alfreddev14/vote-backend:latest
+          docker push alfreddev14/vote-backend:latest
+
       - name: Run Docker Compose
-        run: docker-compose -f docker-compose.yml up --build -d
+        run: |
+          docker-compose -f docker-compose.yml up --build -d
