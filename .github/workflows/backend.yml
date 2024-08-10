@@ -43,6 +43,9 @@ jobs:
       - name: Build Docker image
         run: docker build -t vote-backend:latest ./Vote
 
+      - name: Log in to Docker Hub
+        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
       - name: Push Docker image
         run: |
           docker tag vote-backend:latest alfreddev14/vote-backend:latest
