@@ -2,7 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "../../hooks/useForm";
 import { AppDispatch, RootState } from "../../redux/store";
 import { login } from "../../redux/Reducers/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 export const LoginPage = () => {
+  const navigate = useNavigate();
 
   const { formState, onInputChange, onResetForm } = useForm({
     email: '',
@@ -16,7 +18,9 @@ export const LoginPage = () => {
     dispatch(login({ email: formState.email, password: formState.password }))
       .unwrap()
       .then(() => {
-        console.log("Login successful");
+        navigate("/", {
+          replace: true,
+        });
         onResetForm();
       })
       .catch((err) => {

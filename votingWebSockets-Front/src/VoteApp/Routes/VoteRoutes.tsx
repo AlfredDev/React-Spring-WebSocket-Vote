@@ -1,6 +1,13 @@
+import { Route, Routes } from "react-router-dom"
+import { Home } from "../Pages/Home"
 
 export const VoteRoutes = () => {
   return (
-    <div>VoteRoutes</div>
+    <div>
+      <Routes>
+        <Route path='/*' element={<Home />} />
+
+      </Routes>
+    </div>
   )
 }
