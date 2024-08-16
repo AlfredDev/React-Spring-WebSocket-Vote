@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginRequest } from './authService';
+import { loginRequest, RegisterRequestBack, } from './authService';
 
 
 interface AuthState {
@@ -34,6 +34,24 @@ export const login = createAsyncThunk(
                 return rejectWithValue('Login failed. Please check your credentials.');
             }
         } catch (error: any) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+);
+
+export const register = createAsyncThunk(
+    'auth/register',
+    async (RegisterRequest: { fullName: string, email: string, password: string, role: string }, { rejectWithValue }) => {
+        try {
+            const response = await RegisterRequestBack(RegisterRequest);
+            if (response) {
+                return response;
+            }
+            else {
+                return rejectWithValue('Register failed. Please check your credentials.');
+            }
+        }
+        catch (error: any) {
             return rejectWithValue(error.response?.data || error.message);
         }
     }
@@ -75,6 +93,27 @@ export const authSlice = createSlice({
                 localStorage.setItem('userEmail', action.payload.email);
             })
             .addCase(login.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+            .addCase(register.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.message = null;
+            })
+            .addCase(register.fulfilled, (state, action) => {
+                state.loading = false;
+                state.isAuthenticated = true;
+                state.token = action.payload.token;
+                state.role = action.payload.role;
+                state.email = action.payload.email;
+                state.message = 'Registration successful';
+
+                localStorage.setItem('authToken', action.payload.token);
+                localStorage.setItem('userRole', action.payload.role);
+                localStorage.setItem('userEmail', action.payload.email);
+            })
+            .addCase(register.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             });

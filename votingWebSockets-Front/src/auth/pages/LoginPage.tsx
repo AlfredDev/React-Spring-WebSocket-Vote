@@ -3,6 +3,8 @@ import { useForm } from "../../hooks/useForm";
 import { AppDispatch, RootState } from "../../redux/store";
 import { login } from "../../redux/Reducers/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { CreateAccountForm } from "../components/CreateAccountForm";
 export const LoginPage = () => {
   const navigate = useNavigate();
 
@@ -27,6 +29,10 @@ export const LoginPage = () => {
         console.error("Login failed", err);
       });
   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <>
@@ -68,10 +74,15 @@ export const LoginPage = () => {
           </form>
           <footer>
             <a className="text-indigo-700 hover:text-pink-700 text-sm float-left" href="#">Forgot Password?</a>
-            <a className="text-indigo-700 hover:text-pink-700 text-sm float-right" href="#">Create Account</a>
+            <a className="text-indigo-700 hover:text-pink-700 text-sm float-right" href="#"
+              onClick={openModal}
+            >Create Account</a>
           </footer>
         </div>
       </div>
+      {isModalOpen && (
+        <CreateAccountForm closeModal={closeModal} />
+      )}
     </>
   );
 };
