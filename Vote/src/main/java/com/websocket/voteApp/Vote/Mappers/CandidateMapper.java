@@ -9,5 +9,6 @@ import org.mapstruct.Mapping;
 public interface CandidateMapper {
     Candidate toCandidate(CandidateResponse candidateResponse);
     @Mapping(source = "poll.id", target = "pollId")
+    @Mapping(source = "voteCount", target = "countVote")
     CandidateResponse toCandidateResponse(Candidate candidate);
 }

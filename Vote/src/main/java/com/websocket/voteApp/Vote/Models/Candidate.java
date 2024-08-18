@@ -19,7 +19,7 @@ public class Candidate {
 
     private String name;
     private String partyName;
-
+    private int voteCount;
     @ManyToOne
     @JoinColumn(name = "poll_id")
     private Poll poll;

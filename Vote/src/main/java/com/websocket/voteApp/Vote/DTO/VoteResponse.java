@@ -16,6 +16,4 @@ public class VoteResponse {
     String candidateName;
     String candidatePartyName;
     LocalDateTime timestamp;
-    private long voteCount;
-
 }
