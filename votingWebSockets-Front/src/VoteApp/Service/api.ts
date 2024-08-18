@@ -30,11 +30,8 @@ export const subscribeToVoteUpdates = (
     onVoteUpdate: (vote: VoteCountResponse) => void
 ) => {
 
-
-    // Establish the WebSocket connection to the server
     const socket = new WebSocket('wss://backend-wspq.onrender.com/ws/voting');
 
-    // Handle connection open event
     socket.onopen = () => {
         console.log('WebSocket connection established');
     };
@@ -44,7 +41,7 @@ export const subscribeToVoteUpdates = (
         try {
             const voteUpdate: VoteCountResponse = JSON.parse(event.data);
             console.log(voteUpdate);
-            onVoteUpdate(voteUpdate); // Call the callback function with the received data
+            onVoteUpdate(voteUpdate); 
         } catch (error) {
             console.error('Error processing WebSocket message:', error);
         }
@@ -55,7 +52,6 @@ export const subscribeToVoteUpdates = (
         console.error('WebSocket error:', error);
     };
 
-    // Handle WebSocket connection close event
     socket.onclose = (event) => {
         if (event.wasClean) {
             console.log(`WebSocket connection closed cleanly, code=${event.code}, reason=${event.reason}`);
@@ -64,7 +60,6 @@ export const subscribeToVoteUpdates = (
         }
     };
 
-    // Return a cleanup function to close the WebSocket when it's no longer needed
     return () => {
         socket.close();
     };
