@@ -5,6 +5,7 @@ import com.websocket.voteApp.Vote.DTO.Response.SuccessResponse;
 import com.websocket.voteApp.Vote.DTO.VoteResponse;
 import com.websocket.voteApp.Vote.Service.VoteService;
 import com.websocket.voteApp.Vote.Utils.Utils;
+import com.websocket.voteApp.Vote.WebSocket.SocketHandler.VotingWebSocketHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 public class VoteController {
     private final VoteService voteService;
 
+    private final VotingWebSocketHandler voteWebSocketHandler;
     private final Utils utils;
 
     // =====================================================================
@@ -91,6 +93,7 @@ public class VoteController {
         String token = utils.getTokenFromRequest(httpRequest);
         Long userId = utils.getCurrentUserId(token);
         VoteResponse voteResponse = voteService.saveVote(userId, voteRequest);
+        voteWebSocketHandler.broadcastVoteUpdate();
         return new ResponseEntity<>(SuccessResponse
                 .builder()
                 .statusCode("201")
@@ -103,7 +106,7 @@ public class VoteController {
     // =====================================================================
     //                              GET
     // =====================================================================
-    @GetMapping("votesfrompoll/{id}")
+    @GetMapping("votesfrompoll/{pollId}")
     public ResponseEntity<SuccessResponse> getVotesFrompollId(@PathVariable Long pollId,
                                                               @RequestParam(defaultValue = "0") int page,
                                                               @RequestParam(defaultValue = "10") int size) {

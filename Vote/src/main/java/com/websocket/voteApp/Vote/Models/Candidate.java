@@ -14,14 +14,15 @@ import java.util.Set;
 @Getter
 public class Candidate {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
     private String partyName;
 
-    @ManyToMany
-    private Set<Poll> polls;
+    @ManyToOne
+    @JoinColumn(name = "poll_id")
+    private Poll poll;
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Vote> votes;

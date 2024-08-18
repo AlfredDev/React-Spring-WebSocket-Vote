@@ -15,7 +15,7 @@ import java.util.Set;
 @Builder
 public class Poll {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
@@ -23,7 +23,7 @@ public class Poll {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    @ManyToMany(mappedBy = "polls")
+    @OneToMany(mappedBy = "poll")
     private Set<Candidate> candidates;
 
     @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL)

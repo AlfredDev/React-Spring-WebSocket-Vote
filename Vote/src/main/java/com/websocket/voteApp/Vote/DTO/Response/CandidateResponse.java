@@ -11,7 +11,9 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class CandidateResponse {
-    Long id;
-    String name;
-    String partyName;
+    private Long id;
+    private String name;
+    private String partyName;
+
+    private Long pollId;
 }

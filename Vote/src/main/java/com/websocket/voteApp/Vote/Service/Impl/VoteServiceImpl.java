@@ -82,4 +82,11 @@ public class VoteServiceImpl implements VoteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Could found vote"));
         return voteMapper.toVoteResponse(vote);
     }
+
+    @Override
+    public List<Candidate> getAllCandidatesWithVotes() {
+        return candidateRepository.findAll();
+    }
+
+
 }
