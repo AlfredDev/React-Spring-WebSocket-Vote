@@ -11,5 +11,5 @@ public class VoteRequest {
     @NotNull(message = "Its necessary to provide the candidate")
     private Long idCandidate;
     @NotNull(message = "Its necessary to provide the poll reference")
-    private Long idPoll;
+    private Long pollId;
 }

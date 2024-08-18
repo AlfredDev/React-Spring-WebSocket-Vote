@@ -6,12 +6,6 @@ import com.websocket.voteApp.Vote.DTO.VoteResponse;
 import com.websocket.voteApp.Vote.Service.VoteService;
 import com.websocket.voteApp.Vote.Utils.Utils;
 import com.websocket.voteApp.Vote.WebSocket.SocketHandler.VotingWebSocketHandler;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -23,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Vote Controller", description = "Endpoints for managing votes")
@@ -40,50 +33,9 @@ public class VoteController {
     //                              POST
     // =====================================================================
 
-    @Operation(summary = "Save a vote", description = "Endpoint to save a vote for a specific candidate in a specific poll.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Vote correctly created", content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = SuccessResponse.class),
-                    examples = @ExampleObject(
-                            value = """
-                                    {
-                                      "statusCode": "201",
-                                      "message": "Vote correctly created",
-                                      "object": {
-                                        "id": 1,
-                                        "userId": 1,
-                                        "pollId": 1,
-                                        "candidateId": 1,
-                                        "timestamp": "2024-08-08T12:34:56"
-                                      }
-                                    }
-                                    """
-                    )
-            )),
-            @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ErrorResponse.class),
-                    examples = @ExampleObject(
-                            value = """
-                                    {
-                                      "statusCode": "400",
-                                      "message": "Its necessary to provide the candidate"
-                                    }
-                                    """
-                    )
-            )),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ErrorResponse.class)
-            )),
-            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ErrorResponse.class)
-            ))
-    })
+
     @PostMapping("save")
-    public ResponseEntity<SuccessResponse> saveVote(@Valid VoteRequest voteRequest,
+    public ResponseEntity<SuccessResponse> saveVote(@Valid @RequestBody VoteRequest voteRequest,
                                                     HttpServletRequest httpRequest,
                                                     BindingResult bindingResult) throws BadRequestException {
         if (bindingResult.hasErrors()) {
@@ -92,6 +44,8 @@ public class VoteController {
 
         String token = utils.getTokenFromRequest(httpRequest);
         Long userId = utils.getCurrentUserId(token);
+        System.out.println(userId);
+        System.out.println(voteRequest.getPollId());
         VoteResponse voteResponse = voteService.saveVote(userId, voteRequest);
         voteWebSocketHandler.broadcastVoteUpdate();
         return new ResponseEntity<>(SuccessResponse

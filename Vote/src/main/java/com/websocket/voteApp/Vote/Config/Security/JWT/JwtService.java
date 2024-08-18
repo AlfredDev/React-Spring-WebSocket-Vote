@@ -53,10 +53,20 @@ public class JwtService {
     }
 
     public Long getIdFromToken(String token) {
-        Claims claims = getAllClaims(token);
-        System.out.println("Claims: " + claims);
-        return Long.parseLong(claims.get("userId").toString());
+        try {
+            Claims claims = getAllClaims(token);
+            System.out.println("Claims: " + claims);
+            Object userIdClaim = claims.get("userId");
+            if (userIdClaim == null) {
+                throw new RuntimeException("User ID claim not found in token");
+            }
+            return Long.parseLong(userIdClaim.toString());
+        } catch (Exception e) {
+            System.err.println("Error extracting ID from token: " + e.getMessage());
+            throw new RuntimeException("Invalid token");
+        }
     }
+
 
     public String getUsernameFromToken(String token) {
         return getClaim(token, Claims::getSubject);

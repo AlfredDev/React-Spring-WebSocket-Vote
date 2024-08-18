@@ -35,11 +35,13 @@ public class VoteServiceImpl implements VoteService {
     @Override
     @Transactional
     public VoteResponse saveVote(Long userId, VoteRequest request) {
+        System.out.println(request.getPollId());
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userId + " not found"));
 
-        Poll poll = pollRepository.findById(request.getIdPoll())
-                .orElseThrow(() -> new ResourceNotFoundException("Poll with ID " + request.getIdPoll() + " not found"));
+        Poll poll = pollRepository.findById(request.getPollId())
+                .orElseThrow(() -> new ResourceNotFoundException("Poll with ID " + request.getPollId() + " not found"));
 
         Candidate candidate = candidateRepository.findById(request.getIdCandidate())
                 .orElseThrow(() -> new ResourceNotFoundException("Candidate with ID " + request.getIdCandidate() + " not found"));
