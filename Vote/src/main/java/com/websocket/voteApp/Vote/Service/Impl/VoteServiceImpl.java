@@ -52,7 +52,9 @@ public class VoteServiceImpl implements VoteService {
                 .timestamp(LocalDateTime.now())
                 .poll(poll)
                 .build();
-        return voteMapper.toVoteResponse(voteRepository.save(vote));
+        VoteResponse votesa = voteMapper.toVoteResponse(voteRepository.save(vote));
+        votesa.setVoteCount(voteRepository.countVotesByCandidateIdAndPollId(request.getIdCandidate(), request.getPollId()));
+        return votesa;
     }
 
     @Override
