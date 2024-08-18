@@ -53,7 +53,9 @@ public class JwtService {
     }
 
     public Long getIdFromToken(String token) {
-        return getClaim(token, claims -> Long.parseLong(claims.get("userId").toString()));
+        Claims claims = getAllClaims(token);
+        System.out.println("Claims: " + claims);
+        return Long.parseLong(claims.get("userId").toString());
     }
 
     public String getUsernameFromToken(String token) {
