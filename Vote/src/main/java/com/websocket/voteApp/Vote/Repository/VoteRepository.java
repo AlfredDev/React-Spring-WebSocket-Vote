@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface VoteRepository extends JpaRepository<Vote, Long> {
@@ -20,4 +21,5 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 
     @Query("SELECT COUNT(v) FROM Vote v WHERE v.candidate.id = :candidateId AND v.poll.id = :pollId")
     long countVotesByCandidateIdAndPollId(@Param("candidateId") Long candidateId, @Param("pollId") Long pollId);
+
 }

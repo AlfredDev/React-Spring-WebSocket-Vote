@@ -14,9 +14,7 @@ public class CandidateResponse {
     private Long id;
     private String name;
     private String partyName;
+    private Integer voteCount;
 
     private Long pollId;
-
-    private  Long countVote;
-
 }
